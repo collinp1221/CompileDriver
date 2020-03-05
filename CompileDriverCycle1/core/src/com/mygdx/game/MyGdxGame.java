@@ -7,6 +7,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.w3c.dom.Text;
 
 import java.io.FileNotFoundException;
@@ -15,6 +22,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch; //SpriteBatch that stores all sprites to be used
 	Texture img; //Background Image
 	Texture carImg; //Player 1 car sprite
+	private Stage stage;
+	private Skin skin;
 
 	public int tickCount = 0;
 	public int playerCount = 1;
@@ -29,6 +38,26 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		stage = new Stage(new ScreenViewport());
+
+
+		final TextButton button = new TextButton("Begin",skin,"default");
+		button.setWidth(100);
+		button.setHeight(50);
+		button.setPosition(200,10);
+
+		button.addListener(new ClickListener()
+		{
+
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				player1.setAngle(90);//need to make car move when button is clicked
+			}
+		});
+		Gdx.input.setInputProcessor(stage);
+		stage.addActor(button);
+
 		Gdx.graphics.setTitle("Car Game Demo"); //Set the title to be something more interesting than MyGdxGame
 
 		batch = new SpriteBatch();
@@ -52,6 +81,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		//Begins the SpriteBatch, to allow for drawing sprites to the screen
+
 		batch.begin();
 		batch.draw(img, 0, 0); //Draw Background
 
@@ -64,6 +94,10 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		//Ends the SpriteBatch. After this, nothing can be drawn until the batch is started again
 		batch.end();
+
+		//GUI ELEMENTS
+		stage.act(Gdx.graphics.getDeltaTime());
+		stage.draw();
 	}
 	
 	@Override
