@@ -79,7 +79,7 @@ public class VM {
         }
 
 
-        //JMP Command //TODO WHY DOES THIS NOT WORK?!?!?!?!
+        //JMP Command //TODO Fix this? (might work)
         //Jumps to a line, based on the LBL (label)
         //JMP Test
         if(assemblyArray[currentLine].length() >= 3)
@@ -331,7 +331,7 @@ public class VM {
         {
             if(assemblyArray[currentLine].substring(0,7).equalsIgnoreCase("CHKLEFT") )
             {
-                String subString = assemblyArray[currentLine].substring(8);
+                String subString = assemblyArray[currentLine].substring(7);
                 int numPixels = stringToInt(subString); //The number of pixels to check to the left of the car
 
                 //If checkLeft returns false, skip the next line of the assembly file
@@ -355,7 +355,7 @@ public class VM {
         {
             if(assemblyArray[currentLine].substring(0,8).equalsIgnoreCase("CHKRIGHT") )
             {
-                String subString = assemblyArray[currentLine].substring(9);
+                String subString = assemblyArray[currentLine].substring(8);
                 int numPixels = stringToInt(subString); //The number of pixels to check to the right of the car
 
                 //If checkLeft returns false, skip the next line of the assembly file
@@ -378,7 +378,7 @@ public class VM {
         {
             if(assemblyArray[currentLine].substring(0,8).equalsIgnoreCase("CHKFRONT") )
             {
-                String subString = assemblyArray[currentLine].substring(9);
+                String subString = assemblyArray[currentLine].substring(8);
                 int numPixels = stringToInt(subString); //The number of pixels to check to the front of the car
 
                 //If checkFront returns false, skip the next line of the assembly file
