@@ -1,9 +1,6 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,9 +22,9 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
     private SpriteBatch batch; //SpriteBatch that stores all sprites to be used
     private Texture carImg; //Player 1 car sprite
 
-    private OrthographicCamera camera;
+    private OrthographicCamera camera; //"Camera" Object that can be moved. This is what we see the game window through
 
-    private TiledMap tiledMap;
+    private TiledMap tiledMap; //TileMap data, taken from the .tmx file in /core/assets
     private OrthogonalTiledMapRenderer tiledMapRenderer;
 
     //Various Tile Layers of the TileMap
@@ -45,11 +42,12 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
     private String workingDirectory = System.getProperty("user.dir");
     private String absoluteFilePath = workingDirectory + File.separator + "ai" + File.separator + "defaultAI.txt";
 
+    public boolean hasScaled = false;
+
     Car player1;
     //Car player2 = new Car(2);
     //Car player3 = new Car(3);
     //Car player4 = new Car(4);
-
 
 
     public MainScreen(MyGdxGame agame) throws FileNotFoundException
@@ -101,6 +99,7 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
         //TODO Setup players 2-4 if they are in the game (Dev Cycle 2)
 
     }
+
     @Override
     public void render(float delta){
         //Sets the background to be black (just in case of issues drawing the background)
@@ -147,7 +146,6 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
         tiledMapRenderer.renderTileLayer(foregroundLayer);
         //tiledMapRenderer.renderObjects(collisionLayer); //TODO make this render hitboxes, or just work period honestly
         tiledMapRenderer.getBatch().end();
-
     }
 
     @Override
@@ -164,6 +162,8 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+
+        /*
         if(keycode == Input.Keys.LEFT)
         {
             camera.translate(-32,0);
@@ -189,6 +189,8 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
             tiledMap.getLayers().get(0).setVisible(!tiledMap.getLayers().get(0).isVisible());
         if(keycode == Input.Keys.NUM_2)
             tiledMap.getLayers().get(1).setVisible(!tiledMap.getLayers().get(1).isVisible());
+        */
+
         return false;
     }
 
@@ -224,43 +226,45 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
         return false;
     }
 
-
     @Override
-    public void resize(int width, int height)
-    {
-        camera.viewportWidth = 32 * tiledMap.getProperties().get("width", Integer.class);
-        camera.viewportHeight = 32 * tiledMap.getProperties().get("height", Integer.class);
+    public void resize(int width, int height) {
+        if (!hasScaled) {
+            hasScaled = true;
+            System.out.println("IN RESIZE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-        camera.translate(13,13); //Translate the camera so that the track does not fall off the side of the screen
+            camera.viewportWidth = 32 * tiledMap.getProperties().get("width", Integer.class);
+            camera.viewportHeight = 32 * tiledMap.getProperties().get("height", Integer.class);
 
-        //Formulas for translating screen. I don't entirely understand how they work, so please don't mess with them!
-        //Translate camera properly if width > 18
-        if(tiledMap.getProperties().get("width",Integer.class) > 18)
-        {
-            int amount = tiledMap.getProperties().get("width",Integer.class) - 18;
-            if(amount % 2 == 1) //If # is odd
-                camera.translate(16,0);
-            amount = amount / 2;
-            amount = amount * 32;
-            camera.translate(amount,0);
+            camera.translate(13, 13); //Translate the camera so that the track does not fall off the side of the screen
+
+            //Formulas for translating screen. I don't entirely understand how they work, so please don't mess with them!
+            //Translate camera properly if width > 18
+            if (tiledMap.getProperties().get("width", Integer.class) > 18) {
+                int amount = tiledMap.getProperties().get("width", Integer.class) - 18;
+                if (amount % 2 == 1) //If # is odd
+                    camera.translate(16, 0);
+                amount = amount / 2;
+                amount = amount * 32;
+                camera.translate(amount, 0);
+            }
+            //Translate camera properly if height > 18
+            if (tiledMap.getProperties().get("height", Integer.class) > 18) {
+                System.out.println("Translating camera (height > 18)");
+                int amount = tiledMap.getProperties().get("height", Integer.class) - 18;
+                if (amount % 2 == 1) //if # is odd
+                    camera.translate(16, 0);
+                amount = amount / 2;
+                amount = amount * 32;
+                camera.translate(0, amount);
+            }
+
+
+            //Scale player sprite size, to maintain consistent size despite camera zoom
+            player1.getSprite().setScale(750f / Gdx.graphics.getWidth(), 750f / Gdx.graphics.getHeight());
+
+            //Update the camera to reflect all changes made
+            camera.update();
         }
-        //Translate camera properly if height > 18
-        if(tiledMap.getProperties().get("height",Integer.class) > 18)
-        {
-            int amount = tiledMap.getProperties().get("height",Integer.class) - 18;
-            if(amount % 2 == 1) //if # is odd
-                camera.translate(16,0);
-            amount = amount / 2;
-            amount = amount * 32;
-            camera.translate(0,amount);
-        }
 
-        //Scale player sprite size, to maintain consistent size despite camera zoom
-        player1.getSprite().setScale(750f/Gdx.graphics.getWidth(),750f/Gdx.graphics.getHeight());
-
-        //Update the camera to reflect all changes made
-        camera.update();
     }
-
-
 }
