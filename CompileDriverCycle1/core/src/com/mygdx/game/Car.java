@@ -1,14 +1,11 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-
-import javax.swing.*;
-import java.awt.*;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import java.io.File;
 import java.io.FileNotFoundException;
-
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
@@ -30,10 +27,10 @@ public class Car{
     private float angle = 0;
 
     //Maximum X value that the Car can travel to.
-    private float maxX = 999999;
+    private float maxX = 550;
 
     //Maximum Y value that the Car can travel to.
-    private float maxY = 999999;
+    private float maxY = 550;
 
     //TODO Implement this. Probably do this in 1st design cycle?
     //Tracks the most recent flag passed. Starts at 0 (Start/Finish Line)
@@ -42,9 +39,6 @@ public class Car{
     //Tracks what player the car is
     private int playerNumber;
 
-    //TODO Test this
-    private Texture texture;
-
     //Sprite of the car
     private Sprite sprite;
 
@@ -52,9 +46,11 @@ public class Car{
     private VM vm;
 
     //TODO Implement
-    private Robot robot;
+    private TiledMap tiledMap;
 
+    private int currentTileX;
 
+    private int currentTileY;
 
     //Constructor Classes
 
@@ -69,28 +65,25 @@ public class Car{
     }
 
     //Constructor class with custom AI
-    public Car(int player, String filePath, int startingAngle, int startingX, int startingY, int maxXPos, int maxYPos) throws FileNotFoundException {
+    public Car(int player, String filePath, int startingAngle, int startingX, int startingY, TiledMap map) throws FileNotFoundException {
         playerNumber = player;
-        vm = new VM(filePath); //TODO Make this actually work (it doesn't yet)
+        vm = new VM(filePath);
         angle = startingAngle;
         XPos = startingX;
         YPos = startingY;
-        maxX = maxXPos;
-        maxY = maxYPos;
+        tiledMap = map;
     }
 
-    //TODO Consider removing setStartingX/Y in favor of declaring these on creation of the object
-
     //Sets the starting X Position of the Car
-    public void setStartingX(int startingX)
+    public void setXPos(int xPos)
     {
-        XPos = startingX;
+        XPos = xPos;
     }
 
     //Sets the starting Y Position of the Car
-    public void setStartingY(int startingY)
+    public void setYPos(int yPos)
     {
-        YPos = startingY;
+        YPos = yPos;
     }
 
     //Sets te starting angle of the Car
@@ -105,12 +98,6 @@ public class Car{
         sprite = new Sprite(inputTexture);
     }
 
-    public void setMapTexture(Texture mapTexture)
-    {
-        texture = mapTexture;
-    }
-
-
     //Occurs every time the core game loop runs
     public void doTick()
     {
@@ -120,6 +107,14 @@ public class Car{
         //Moves the car based on velocity
         move();
 
+        //Update current tile position
+        double tempNumberX = (tiledMap.getProperties().get("width",Integer.class) * 32) / 550f;
+        currentTileX = (int)((XPos/32) * tempNumberX);
+        double tempNumberY = (tiledMap.getProperties().get("height",Integer.class) * 32) / 550f;
+        currentTileY = (int)((YPos/32) * tempNumberY);
+
+        System.out.println("X Tile: " + currentTileX + " Y Tile: " + currentTileY);
+
         //Update the sprite's location and angle to match that of the Car object's
         sprite.setRotation(angle);
         sprite.setX((int)XPos - 24); //Offset x by half the width to center
@@ -127,10 +122,9 @@ public class Car{
 
     }
 
-    //TODO: Finish and comment this
     public void accelerate(double velocity)
     {
-        //TODO Add proper acceleration
+        //TODO Possibly implement a more realistic acceleration algorithm
 
         XVelocity += velocity * cos((angle * 3.14159)/180);
         YVelocity += velocity * sin((angle * 3.14159)/180);
@@ -148,7 +142,6 @@ public class Car{
 
     public void move()
     {
-        System.out.println("XVelocity is: " + XVelocity + " YVelocity is " + YVelocity);
         XPos += XVelocity;
         YPos += YVelocity;
         //TODO Tweak code to decrease velocity, maybe decrease quicker if car is in grass?
@@ -170,7 +163,6 @@ public class Car{
     //Sets the car's angle to be X degrees greater than the current angle
     public void turnCounterClockwise(int degrees)
     {
-        System.out.println("In method turnCounterClockwise of Car.java. Angle is " + angle);
         angle += degrees;
         if(angle >= 360)
             angle -= 360;
@@ -185,107 +177,129 @@ public class Car{
     }
 
 
-    //TODO Implement checking the map data file to get the road color
+    //TODO Implement checking the map data file to see what is grass/obstacle and what is not
     public boolean checkLeft(int numPixels)
     {
-        if(numPixels <= 0)
-            return false;
-        else
+        boolean returnValue = false;
+        TiledMapTileLayer backgroundLayer1 = (TiledMapTileLayer)tiledMap.getLayers().get(0);
+
+        //Car facing right
+        if((angle >=0 && angle <= 45) || (angle >= 316 && angle <= 360))
         {
-
-            Color borderColor = new Color(255,255,255);
-            texture.getTextureData().prepare(); //Required to get texture data
-            Pixmap pixmap = texture.getTextureData().consumePixmap(); //Get texture data and save it as a pixmap
-
-            //Car facing right
-            if((angle >=0 && angle <= 45) || (angle >= 316 && angle <= 360))
-            {
-
-            }
-            //Car facing up (north)
-            else if(angle >= 46 && angle <= 135)
-            {
-
-            }
-            //Car facing left
-            else if(angle >= 136 && angle <= 225)
-            {
-
-            }
-            //Car facing down (south)
-            else if(angle >= 226 && angle <= 315)
-            {
-
-            }
-
-/*
-            for(int i=0;i<numPixels;i++) //X
-            {
-                for(int j=0;j<48;j++) //Y
-                {
-                    Color originalColor = new Color(pixmap.getPixel((int)XPos,(int)YPos)); //Get the color of selected pixel
-                    Color convertedColor = new Color(originalColor.getBlue(),originalColor.getGreen(),originalColor.getRed()); //Convert to RGB, since LibGDX exports color as BGR for some reason...
-
-                }
-            }
-*/
-
-            return false;
+            if(currentTileY + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getHeight())
+                returnValue = true;
+            else if(backgroundLayer1.getCell(currentTileX,currentTileY + 1).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
         }
+        //Car facing up (north)
+        else if(angle >= 46 && angle <= 135)
+        {
+            if(currentTileX - 1 <= 0)
+                returnValue = true;
+            else if(backgroundLayer1.getCell(currentTileX - 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
+        }
+        //Car facing left
+        else if(angle >= 136 && angle <= 225)
+        {
+            if(currentTileY <= 0)
+                returnValue = true;
+                //backgroundLayer1.getCell(0, 0).getTile().getProperties().get("tileType")
+            else if(backgroundLayer1.getCell(currentTileX,currentTileY - 1).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
+        }
+        //Car facing down (south)
+        else if(angle >= 226 && angle <= 315)
+        {
+            if(currentTileX + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getWidth())
+                returnValue = true;
+            else if(backgroundLayer1.getCell(currentTileX + 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
+        }
+            return returnValue;
     }
 
     public boolean checkRight(int numPixels)
     {
+        boolean returnValue = false;
+        TiledMapTileLayer backgroundLayer1 = (TiledMapTileLayer)tiledMap.getLayers().get(0);
 
         //Car facing right
         if((angle >=0 && angle <= 45) || (angle >= 316 && angle <= 360))
         {
-
+            if(currentTileY - 1 <= 0)
+                returnValue = true;
+            //backgroundLayer1.getCell(0, 0).getTile().getProperties().get("tileType")
+            else if(backgroundLayer1.getCell(currentTileX,currentTileY - 1).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
         }
         //Car facing up (north)
         else if(angle >= 46 && angle <= 135)
         {
-
+            if(currentTileX + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getWidth())
+                returnValue = true;
+            else if(backgroundLayer1.getCell(currentTileX + 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
         }
         //Car facing left
         else if(angle >= 136 && angle <= 225)
         {
-
+            if(currentTileY + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getHeight())
+                returnValue = true;
+            else if(backgroundLayer1.getCell(currentTileX,currentTileY + 1).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
         }
         //Car facing down (south)
         else if(angle >= 226 && angle <= 315)
         {
-
+            if(currentTileX - 1 <= 0)
+                returnValue = true;
+            else if(backgroundLayer1.getCell(currentTileX - 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
         }
 
-        return false;
+        return returnValue;
     }
 
     public boolean checkFront(int numPixels)
     {
+        boolean returnValue = false;
+        TiledMapTileLayer backgroundLayer1 = (TiledMapTileLayer)tiledMap.getLayers().get(0);
 
         //Car facing right
         if((angle >=0 && angle <= 45) || (angle >= 316 && angle <= 360))
         {
-
+            if(currentTileX + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getWidth())
+                returnValue = true;
+            else if(backgroundLayer1.getCell(currentTileX + 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
         }
         //Car facing up (north)
         else if(angle >= 46 && angle <= 135)
         {
-
+            if(currentTileY + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getHeight())
+                returnValue = true;
+            else if(backgroundLayer1.getCell(currentTileX, currentTileY + 1).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
         }
         //Car facing left
         else if(angle >= 136 && angle <= 225)
         {
-
+            if(currentTileX - 1 <= 0)
+                returnValue = true;
+            else if(backgroundLayer1.getCell(currentTileX - 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
         }
         //Car facing down (south)
         else if(angle >= 226 && angle <= 315)
         {
-
+            if(currentTileY - 1 <= 0)
+                returnValue = true;
+            else if(backgroundLayer1.getCell(currentTileX, currentTileY - 1).getTile().getProperties().get("tileType").equals("grass"))
+                returnValue = true;
         }
 
-        return false;
+        return returnValue;
     }
 
     //Returns the X Coordinate of the Car (larger number = farther right. Starts at 0)
