@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.2" tiledversion="1.3.2" name="grass-tiles-2-small" tilewidth="32" tileheight="32" tilecount="72" columns="12">
- <image source="tileset/grass-tiles-2-small.png" width="384" height="192"/>
+ <image source="../../../tileset/grass-tiles-2-small.png" width="384" height="192"/>
  <tile id="0">
   <properties>
    <property name="tileType" value="grass"/>
@@ -171,16 +171,6 @@
    <property name="tileType" value="track"/>
   </properties>
  </tile>
- <tile id="34">
-  <properties>
-   <property name="tileType" value=""/>
-  </properties>
- </tile>
- <tile id="35">
-  <properties>
-   <property name="tileType" value=""/>
-  </properties>
- </tile>
  <tile id="36">
   <properties>
    <property name="tileType" value="grass"/>
@@ -229,16 +219,6 @@
  <tile id="45">
   <properties>
    <property name="tileType" value="track"/>
-  </properties>
- </tile>
- <tile id="46">
-  <properties>
-   <property name="tileType" value=""/>
-  </properties>
- </tile>
- <tile id="47">
-  <properties>
-   <property name="tileType" value=""/>
   </properties>
  </tile>
  <tile id="48">

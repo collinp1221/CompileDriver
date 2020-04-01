@@ -66,7 +66,7 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
 
 
         //TODO Throw an error and exit if the tilemap has a width or height < 18
-        tiledMap = new TmxMapLoader().load("tileMap.tmx");
+        tiledMap = new TmxMapLoader().load("level1.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         MapLayers mapLayers = tiledMap.getLayers();
@@ -230,7 +230,6 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
     public void resize(int width, int height) {
         if (!hasScaled) {
             hasScaled = true;
-            System.out.println("IN RESIZE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             camera.viewportWidth = 32 * tiledMap.getProperties().get("width", Integer.class);
             camera.viewportHeight = 32 * tiledMap.getProperties().get("height", Integer.class);
@@ -252,7 +251,7 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
                 System.out.println("Translating camera (height > 18)");
                 int amount = tiledMap.getProperties().get("height", Integer.class) - 18;
                 if (amount % 2 == 1) //if # is odd
-                    camera.translate(16, 0);
+                    camera.translate(0, 16);
                 amount = amount / 2;
                 amount = amount * 32;
                 camera.translate(0, amount);

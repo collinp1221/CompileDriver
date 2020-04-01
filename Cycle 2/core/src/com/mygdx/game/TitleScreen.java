@@ -33,12 +33,13 @@ public class TitleScreen implements Screen {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                try {
-                    game.setScreen( new MainScreen(game));
-                }catch (FileNotFoundException ex)
-                {
-                    System.out.print("Hello");
-                }
+                //try {
+                    game.setScreen( new LevelSelect(game));
+                //}
+                //catch (FileNotFoundException ex)
+                //{
+                //    System.out.print("Hello");
+                //}
             }
         });
 
