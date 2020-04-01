@@ -41,6 +41,7 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
     public int playerCount = 1; //Tracks the number of players in the game
     private String workingDirectory = System.getProperty("user.dir");
     private String absoluteFilePath = workingDirectory + File.separator + "ai" + File.separator + "defaultAI.txt";
+    private String tileMapName;
 
     public boolean hasScaled = false;
 
@@ -50,8 +51,9 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
     //Car player4 = new Car(4);
 
 
-    public MainScreen(MyGdxGame agame) throws FileNotFoundException
+    public MainScreen(MyGdxGame agame, String levelName) throws FileNotFoundException //TODO Add in an object to store TMX File here
     {
+        tileMapName = levelName;
 
         batch = new SpriteBatch();
         carImg = new Texture("car1.png");
@@ -66,7 +68,7 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
 
 
         //TODO Throw an error and exit if the tilemap has a width or height < 18
-        tiledMap = new TmxMapLoader().load("level1.tmx");
+        tiledMap = new TmxMapLoader().load(tileMapName);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         MapLayers mapLayers = tiledMap.getLayers();
@@ -110,6 +112,7 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
         //Update camera position
         camera.update();
         tiledMapRenderer.setView(camera);
+
 
 
         //int[] backgroundLayers = {0,1}; //Set the background layer as the two bottom-most layers

@@ -17,7 +17,7 @@ public class TitleScreen implements Screen {
     MyGdxGame game;
     private Stage stage;
     SpriteBatch batchpic;
-    Texture img;
+    private Texture img;
 
     public TitleScreen(MyGdxGame agame)
     {
