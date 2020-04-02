@@ -16,7 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 
 public class LevelSelect implements Screen {
@@ -35,12 +37,17 @@ public class LevelSelect implements Screen {
     private Sprite track2Logo;
     private Texture track3Texture;
     private Sprite track3Logo;
+    private Texture track4Texture;
+    private Sprite track4Logo;
 
     private SpriteBatch batch;
 
     FitViewport viewport;
     ShapeRenderer shapeRenderer;
     OrthographicCamera camera;
+
+    JFileChooser fileChooser = new JFileChooser();
+    private JFrame frame;
 
     LevelSelect(MyGdxGame agame)
     {
@@ -53,6 +60,9 @@ public class LevelSelect implements Screen {
         shapeRenderer.setAutoShapeType(true);
 
         batch = new SpriteBatch();
+
+        //Set filechooser to the user's home directory
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 
         //Background Initialization
         backgroundTexture = new Texture("LevelSelectBG.png");
@@ -76,7 +86,13 @@ public class LevelSelect implements Screen {
         track3Logo.setX(386);
         track3Logo.setY(350);
 
+        //Track 4 Logo Sprite Initialization
+        track4Texture = new Texture("logos\\track4logo.png");
+        track4Logo = new Sprite(track4Texture);
+        track4Logo.setX(36);
+        track4Logo.setY(150);
 
+        //Continue Button
         final TextButton continueButton = new TextButton("Continue",game.skin,"default");
         continueButton.setWidth(100);
         continueButton.setHeight(50);
@@ -93,6 +109,10 @@ public class LevelSelect implements Screen {
                     } catch (FileNotFoundException ex) {
                         System.out.print("ERROR: File Not Found Exception in LevelSelect.java");
                     }
+                }
+                else if(selected == 6)
+                {
+                    System.out.println("ERROR: This feature has not been implemented yet!");
                 }
                 else
                 {
@@ -166,6 +186,28 @@ public class LevelSelect implements Screen {
             }
         });
 
+        final TextButton customButton = new TextButton("Custom Track",game.skin,"default");
+        customButton.setWidth(100);
+        customButton.setHeight(50);
+        customButton.setPosition(398,90);
+        customButton.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try
+                {
+                    int result = fileChooser.showOpenDialog(frame);
+
+
+                    selected = 6;
+                }
+                catch(Exception e)
+                {
+                    System.out.println("ERROR: Something went wrong in file selection");
+                }
+            }
+        });
+
         //Back Button. When pressed, return to the Title Screen
         final TextButton backButton = new TextButton("Back",game.skin,"default");
         backButton.setWidth(100);
@@ -186,6 +228,7 @@ public class LevelSelect implements Screen {
         stage.addActor(button3);
         stage.addActor(button4);
         stage.addActor(button5);
+        stage.addActor(customButton);
         stage.addActor(backButton);
         stage.addActor(continueButton);
     }
@@ -257,9 +300,18 @@ public class LevelSelect implements Screen {
             shapeRenderer.setColor(Color.WHITE);
         }
 
+        if(selected == 6)
+        {
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.rect(386, 149, 127,127);
+            shapeRenderer.rect(385, 148, 129,129);
+            shapeRenderer.rect(384, 147, 131,131);
+            shapeRenderer.rect(383, 146, 133,133);
+            shapeRenderer.setColor(Color.WHITE);
+        }
 
-        //4, 5, 6
-        shapeRenderer.rect(36,150,125,125);
+
+        //5, 6
         shapeRenderer.rect(212,150,125,125);
         shapeRenderer.rect(387,150,125,125);
 
@@ -270,6 +322,7 @@ public class LevelSelect implements Screen {
         track1Logo.draw(batch);
         track2Logo.draw(batch);
         track3Logo.draw(batch);
+        track4Logo.draw(batch);
         batch.end();
 
     }
