@@ -48,6 +48,7 @@ public class LevelSelect implements Screen {
 
     JFileChooser fileChooser = new JFileChooser();
     private JFrame frame;
+    File selectedFile;
 
     LevelSelect(MyGdxGame agame)
     {
@@ -97,6 +98,7 @@ public class LevelSelect implements Screen {
         continueButton.setWidth(100);
         continueButton.setHeight(50);
         continueButton.setPosition(400,10);
+        continueButton.setColor(Color.GREEN);
         continueButton.addListener(new ClickListener() {
 
             @Override
@@ -186,6 +188,8 @@ public class LevelSelect implements Screen {
             }
         });
 
+
+        //Custom Track button
         final TextButton customButton = new TextButton("Custom Track",game.skin,"default");
         customButton.setWidth(100);
         customButton.setHeight(50);
@@ -197,16 +201,29 @@ public class LevelSelect implements Screen {
                 try
                 {
                     int result = fileChooser.showOpenDialog(frame);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        selectedFile = fileChooser.getSelectedFile();
+                        //If the selected file ends in ".tmx":
+                        if(selectedFile.getAbsolutePath().substring(selectedFile.getAbsolutePath().length() - 4).equals(".tmx"))
+                        {
+                            System.out.println("Selected a TMX file! :D");
+                            selected = 6;
+                        }
+                        else
+                        {
+                            System.out.println("ERROR: Invalid File Selected!");
+                        }
+                    }
 
-
-                    selected = 6;
                 }
                 catch(Exception e)
                 {
                     System.out.println("ERROR: Something went wrong in file selection");
+                    selected = 1;
                 }
             }
         });
+
 
         //Back Button. When pressed, return to the Title Screen
         final TextButton backButton = new TextButton("Back",game.skin,"default");
