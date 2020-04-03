@@ -52,6 +52,10 @@ public class Car{
 
     private int currentTileY;
 
+    private int adjustedTileX = 0;
+
+    private int adjustedTileY = 0;
+
     //Constructor Classes
 
     //Default constructor with only player number, uses the default AI
@@ -180,12 +184,15 @@ public class Car{
     //TODO Implement checking the map data file to see what is grass/obstacle and what is not
     public boolean checkLeft(int numPixels)
     {
+        double tempNumberX = (tiledMap.getProperties().get("width",Integer.class) * 32) / 550f; //TODO Make sure this is implemented
+        double tempNumberY = (tiledMap.getProperties().get("height",Integer.class) * 32) / 550f;
         boolean returnValue = false;
         TiledMapTileLayer backgroundLayer1 = (TiledMapTileLayer)tiledMap.getLayers().get(0);
 
         //Car facing right
         if((angle >=0 && angle <= 45) || (angle >= 316 && angle <= 360))
         {
+            adjustedTileY = (int)(((YPos + 14 + numPixels)/32) * tempNumberY); //Adjusted Y Tile to be checked. Current YPos + 1/2 of sprite width (28) + number of pixels away from car to be checked
             if(currentTileY + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getHeight())
                 returnValue = true;
             else if(backgroundLayer1.getCell(currentTileX,currentTileY + 1).getTile().getProperties().get("tileType").equals("grass"))
@@ -194,26 +201,28 @@ public class Car{
         //Car facing up (north)
         else if(angle >= 46 && angle <= 135)
         {
+            adjustedTileX = (int)(((XPos - 14 - numPixels)/32) * tempNumberX); //Adjusted X Tile to be checked. Current XPOS - 1/2 of sprite width (28) - number of pixels away from the car to be checked
             if(currentTileX - 1 <= 0)
-                returnValue = true;
-            else if(backgroundLayer1.getCell(currentTileX - 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+            returnValue = true;
+            else if(backgroundLayer1.getCell(adjustedTileX, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
                 returnValue = true;
         }
         //Car facing left
         else if(angle >= 136 && angle <= 225)
         {
+            adjustedTileY = (int)(((YPos - 14 - numPixels)/32) * tempNumberY); //Adjusted Y Tile to be checked. Current YPos - 1/2 of sprite width (28) - number of pixels away from car to be checked
             if(currentTileY <= 0)
                 returnValue = true;
-                //backgroundLayer1.getCell(0, 0).getTile().getProperties().get("tileType")
-            else if(backgroundLayer1.getCell(currentTileX,currentTileY - 1).getTile().getProperties().get("tileType").equals("grass"))
+            else if(backgroundLayer1.getCell(currentTileX,adjustedTileY).getTile().getProperties().get("tileType").equals("grass"))
                 returnValue = true;
         }
         //Car facing down (south)
         else if(angle >= 226 && angle <= 315)
         {
+            adjustedTileX = (int)(((XPos + 14 + numPixels)/32) * tempNumberX); //Adjusted X Tile to be checked. Current XPOS + 1/2 of sprite width (28) + number of pixels away from the car to be checked
             if(currentTileX + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getWidth())
                 returnValue = true;
-            else if(backgroundLayer1.getCell(currentTileX + 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+            else if(backgroundLayer1.getCell(adjustedTileX, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
                 returnValue = true;
         }
             return returnValue;
@@ -221,40 +230,46 @@ public class Car{
 
     public boolean checkRight(int numPixels)
     {
+        double tempNumberX = (tiledMap.getProperties().get("width",Integer.class) * 32) / 550f; //TODO Make sure this is implemented
+        double tempNumberY = (tiledMap.getProperties().get("height",Integer.class) * 32) / 550f;
         boolean returnValue = false;
         TiledMapTileLayer backgroundLayer1 = (TiledMapTileLayer)tiledMap.getLayers().get(0);
 
         //Car facing right
         if((angle >=0 && angle <= 45) || (angle >= 316 && angle <= 360))
         {
+            adjustedTileY = (int)(((YPos - 14 - numPixels)/32) * tempNumberY); //Adjusted Y Tile to be checked. Current YPos - 1/2 of sprite width (28) - number of pixels away from car to be checked
             if(currentTileY - 1 <= 0)
                 returnValue = true;
             //backgroundLayer1.getCell(0, 0).getTile().getProperties().get("tileType")
-            else if(backgroundLayer1.getCell(currentTileX,currentTileY - 1).getTile().getProperties().get("tileType").equals("grass"))
+            else if(backgroundLayer1.getCell(currentTileX,adjustedTileY).getTile().getProperties().get("tileType").equals("grass"))
                 returnValue = true;
         }
         //Car facing up (north)
         else if(angle >= 46 && angle <= 135)
         {
+            adjustedTileX = (int)(((XPos + 14 + numPixels)/32) * tempNumberX); //Adjusted X Tile to be checked. Current XPOS + 1/2 of sprite width (28) + number of pixels away from the car to be checked
             if(currentTileX + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getWidth())
                 returnValue = true;
-            else if(backgroundLayer1.getCell(currentTileX + 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+            else if(backgroundLayer1.getCell(adjustedTileX, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
                 returnValue = true;
         }
         //Car facing left
         else if(angle >= 136 && angle <= 225)
         {
+            adjustedTileY = (int)(((YPos + 14 + numPixels)/32) * tempNumberY); //Adjusted Y Tile to be checked. Current YPos + 1/2 of sprite width (28) + number of pixels away from car to be checked
             if(currentTileY + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getHeight())
                 returnValue = true;
-            else if(backgroundLayer1.getCell(currentTileX,currentTileY + 1).getTile().getProperties().get("tileType").equals("grass"))
+            else if(backgroundLayer1.getCell(currentTileX,adjustedTileY).getTile().getProperties().get("tileType").equals("grass"))
                 returnValue = true;
         }
         //Car facing down (south)
         else if(angle >= 226 && angle <= 315)
         {
+            adjustedTileX = (int)(((XPos - 14 - numPixels)/32) * tempNumberX); //Adjusted X Tile to be checked. Current XPOS - 1/2 of sprite width (28) - number of pixels away from the car to be checked
             if(currentTileX - 1 <= 0)
                 returnValue = true;
-            else if(backgroundLayer1.getCell(currentTileX - 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+            else if(backgroundLayer1.getCell(adjustedTileX, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
                 returnValue = true;
         }
 
@@ -271,7 +286,7 @@ public class Car{
         {
             if(currentTileX + 1 >= ((TiledMapTileLayer) tiledMap.getLayers().get(0)).getWidth())
                 returnValue = true;
-            else if(backgroundLayer1.getCell(currentTileX + 1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
+            else if(backgroundLayer1.getCell(currentTileX +  1, currentTileY).getTile().getProperties().get("tileType").equals("grass"))
                 returnValue = true;
         }
         //Car facing up (north)

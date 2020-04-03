@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -26,6 +28,7 @@ public class LevelSelect implements Screen {
     MyGdxGame game;
     private Stage stage;
     private int selected = 1;
+    private boolean validTMXSelected = false; //Tracks whether or not the selected TileMap file is correct or not.
 
     private Texture backgroundTexture;
     private Sprite background;
@@ -114,7 +117,24 @@ public class LevelSelect implements Screen {
                 }
                 else if(selected == 6)
                 {
-                    System.out.println("ERROR: This feature has not been implemented yet!");
+                    //TODO ALL TMX CHECKING CODE HERE!!!
+                    System.out.println("This feature has not been implemented yet!");
+
+                    //Attempt to open the TiledMap file. If it fails, set validTMXSelected to false and change selected to 0 (No track selected)
+                    try
+                    {
+                        TiledMap tiledMap = new TmxMapLoader().load(selectedFile.getAbsolutePath());
+                        //TODO More tiledMap checking here
+
+                        game.setScreen(new MainScreen(game,selectedFile));
+                    }
+                    catch(Exception e)
+                    {
+                        System.out.println("ERROR: Unable to load the selected file");
+                        validTMXSelected = false;
+                        selected = 0;
+                    }
+
                 }
                 else
                 {
@@ -206,12 +226,14 @@ public class LevelSelect implements Screen {
                         //If the selected file ends in ".tmx":
                         if(selectedFile.getAbsolutePath().substring(selectedFile.getAbsolutePath().length() - 4).equals(".tmx"))
                         {
-                            System.out.println("Selected a TMX file! :D");
+                            System.out.println("Selected a TMX file");
                             selected = 6;
+                            validTMXSelected = true;
                         }
                         else
                         {
-                            System.out.println("ERROR: Invalid File Selected!");
+                            validTMXSelected = false;
+                            System.out.println("Invalid File Selected!");
                         }
                     }
 

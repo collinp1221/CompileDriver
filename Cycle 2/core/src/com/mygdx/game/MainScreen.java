@@ -43,6 +43,8 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
     private String absoluteFilePath = workingDirectory + File.separator + "ai" + File.separator + "defaultAI.txt";
     private String tileMapName;
 
+    private File TMXFile;
+
     public boolean hasScaled = false;
 
     Car player1;
@@ -50,6 +52,57 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
     //Car player3 = new Car(3);
     //Car player4 = new Car(4);
 
+    public MainScreen(MyGdxGame agame, File tileMapFile)
+    {
+        TMXFile = tileMapFile;
+
+
+        batch = new SpriteBatch();
+        carImg = new Texture("car1.png");
+
+        //Camera setup
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //camera.translate(0,0);
+        camera.update();
+
+
+
+
+        //TODO Throw an error and exit if the tilemap has a width or height < 18
+        tiledMap = new TmxMapLoader().load(TMXFile.getAbsolutePath());
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+
+        MapLayers mapLayers = tiledMap.getLayers();
+
+        //Initialize players
+        try {
+            player1 = new Car(1, absoluteFilePath, 0, 50, 50, tiledMap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        player1.setSprite(carImg); //Sets the sprite for player 1
+
+        //TODO Implement more layers/less layers (Cycle 2??)
+        //Assign the proper layer ID to each TileMap Layer
+        backgroundLayer1 = (TiledMapTileLayer)mapLayers.get(0);
+        backgroundLayer2 = (TiledMapTileLayer)mapLayers.get(1);
+        foregroundLayer = (TiledMapTileLayer)mapLayers.get(2);
+        //collisionLayer = mapLayers.get(3);
+
+        //objects = collisionLayer.getObjects();
+
+        Gdx.graphics.setWindowedMode(tiledMap.getProperties().get("width",Integer.class) * 32, tiledMap.getProperties().get("height",Integer.class) * 32);
+        //TODO If the window is over a certain size, shrink it
+
+
+        Gdx.input.setInputProcessor(this);
+
+
+        //TODO Setup players 2-4 if they are in the game (Dev Cycle 2)
+
+    }
 
     public MainScreen(MyGdxGame agame, String levelName) throws FileNotFoundException //TODO Add in an object to store TMX File here
     {
@@ -98,8 +151,7 @@ public class MainScreen extends ScreenAdapter implements InputProcessor {
         Gdx.input.setInputProcessor(this);
 
 
-        //TODO Setup players 2-4 if they are in the game (Dev Cycle 2)
-
+        //TODO Setup players 2-4 if they are in the game (Dev Cycle 2?)
     }
 
     @Override
