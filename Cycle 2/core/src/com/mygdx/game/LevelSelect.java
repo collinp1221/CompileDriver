@@ -25,43 +25,49 @@ import java.io.FileNotFoundException;
 
 public class LevelSelect implements Screen {
 
-    MyGdxGame game;
+    MyGdxGame game; //Game object
     private Stage stage;
-    private int selected = 1;
+    private int selected = 1; //Tracks the currently selected level
     private boolean validTMXSelected = false; //Tracks whether or not the selected TileMap file is correct or not.
 
-    private Texture backgroundTexture;
-    private Sprite background;
+    private Texture backgroundTexture; //Texture to be applied to the background sprite
+    private Sprite background; //Image to be rendered as the background
 
     //Track Sprites and Textures (For the track icons)
-    private Texture track1Texture;
-    private Sprite track1Logo;
-    private Texture track2Texture;
-    private Sprite track2Logo;
-    private Texture track3Texture;
-    private Sprite track3Logo;
-    private Texture track4Texture;
-    private Sprite track4Logo;
+    private Texture track1Texture; //Texture for the Track 1 icon
+    private Sprite track1Logo; //Track 1 icon Sprite
+    private Texture track2Texture; //Texture for the Track 2 icon
+    private Sprite track2Logo;//Track 2 icon Sprite
+    private Texture track3Texture; //Texture for the Track 3 icon
+    private Sprite track3Logo;//Track 3 icon Sprite
+    private Texture track4Texture; //Texture for the Track 4 icon
+    private Sprite track4Logo;//Track 4 icon Sprite
+    private Texture track5Texture; //Texture for the Track 5 icon
+    private Sprite track5Logo;//Track 5 icon Sprite
+    private Texture customTrackTexture; //Custom Track icon Texture
+    private Sprite customTrackSprite; //Custom Track icon Sprite
 
-    private SpriteBatch batch;
+    private SpriteBatch batch; //Batch through which all sprites will be rendered (required LibGDX thing)
 
-    FitViewport viewport;
-    ShapeRenderer shapeRenderer;
-    OrthographicCamera camera;
+    FitViewport viewport; //Viewport through which rendered sprites will be viewed
+    ShapeRenderer shapeRenderer; //Used to render the red outline around the selected track
+    OrthographicCamera camera; //Camera through which the menu will be viewed (works with viewport)
 
-    JFileChooser fileChooser = new JFileChooser();
-    private JFrame frame;
-    File selectedFile;
+    JFileChooser fileChooser = new JFileChooser(); //Object that is used to open a file select window for selecting a custom track
+    private JFrame frame; //The window in which the file select window will be opened
+    File selectedFile; //Will store the selected TileMap file
 
+    //Create function. Runs once
     LevelSelect(MyGdxGame agame)
     {
         shapeRenderer = new ShapeRenderer();
 
+        //Set viewport to be 550x550
         viewport = new FitViewport(550,550);
         game = agame;
         stage = new Stage(new ScreenViewport());
 
-        shapeRenderer.setAutoShapeType(true);
+        shapeRenderer.setAutoShapeType(true); //Allows the shaperenderer to render objects in less time
 
         batch = new SpriteBatch();
 
@@ -96,6 +102,18 @@ public class LevelSelect implements Screen {
         track4Logo.setX(36);
         track4Logo.setY(150);
 
+        //Track 5 Logo Sprite Initialization
+        track5Texture = new Texture("logos\\track5logo.png");
+        track5Logo = new Sprite(track5Texture);
+        track5Logo.setX(211);
+        track5Logo.setY(150);
+
+        //Custom Track Sprite Initialization
+        customTrackTexture = new Texture("logos\\customTrackLogo.png");
+        customTrackSprite = new Sprite(customTrackTexture);
+        customTrackSprite.setX(386);
+        customTrackSprite.setY(150);
+
         //Continue Button
         final TextButton continueButton = new TextButton("Continue",game.skin,"default");
         continueButton.setWidth(100);
@@ -106,6 +124,7 @@ public class LevelSelect implements Screen {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                //If one of the 5 preset levels are selected:
                 if(selected >= 1 && selected <= 5)
                 {
                     String levelString ="level" + selected + ".tmx";
@@ -115,11 +134,10 @@ public class LevelSelect implements Screen {
                         System.out.print("ERROR: File Not Found Exception in LevelSelect.java");
                     }
                 }
+                //If the Custom Track button is selected:
                 else if(selected == 6)
                 {
-                    //TODO ALL TMX CHECKING CODE HERE!!!
-                    System.out.println("This feature has not been implemented yet!");
-
+                    //TODO All TMX Checking code here
                     //Attempt to open the TiledMap file. If it fails, set validTMXSelected to false and change selected to 0 (No track selected)
                     try
                     {
@@ -128,6 +146,7 @@ public class LevelSelect implements Screen {
 
                         game.setScreen(new MainScreen(game,selectedFile));
                     }
+                    //If an error is caught, then output an error message, and select nothing
                     catch(Exception e)
                     {
                         System.out.println("ERROR: Unable to load the selected file");
@@ -136,6 +155,7 @@ public class LevelSelect implements Screen {
                     }
 
                 }
+                //If something unexpected is selected, output an error message
                 else
                 {
                     System.out.println("ERROR: Invalid input!!");
@@ -262,6 +282,7 @@ public class LevelSelect implements Screen {
         });
 
 
+        //Initialize all Actors
         stage.addActor(button1);
         stage.addActor(button2);
         stage.addActor(button3);
@@ -283,11 +304,12 @@ public class LevelSelect implements Screen {
     {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //TODO Draw Background Image here (as a sprite)
+        //Draw the background image
         batch.begin();
         background.draw(batch);
         batch.end();
 
+        //All stage actions occur here
         stage.act();
         stage.draw();
 
@@ -349,19 +371,16 @@ public class LevelSelect implements Screen {
             shapeRenderer.setColor(Color.WHITE);
         }
 
-
-        //5, 6
-        shapeRenderer.rect(212,150,125,125);
-        shapeRenderer.rect(387,150,125,125);
-
         shapeRenderer.end();
 
-        //Render all sprites
+        //Render all sprites (Level Select Icons)
         batch.begin();
         track1Logo.draw(batch);
         track2Logo.draw(batch);
         track3Logo.draw(batch);
         track4Logo.draw(batch);
+        track5Logo.draw(batch);
+        customTrackSprite.draw(batch);
         batch.end();
 
     }
