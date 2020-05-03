@@ -42,6 +42,25 @@ public class TitleScreen implements Screen {
                 //}
             }
         });
+        
+        final TextButton options = new TextButton("Options",game.skin,"default");
+        options.setWidth(100);
+        options.setHeight(50);
+        options.setPosition(225,10);
+        options.addListener(new ClickListener()
+        {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //try {
+                    game.setScreen( new OptionsScreen(game));
+                //}
+                //catch (FileNotFoundException ex)
+                //{
+                //    System.out.print("Hello");
+                //}
+            }
+        });
 
         stage.addActor(begin);
     }
