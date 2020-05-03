@@ -44,6 +44,8 @@ public class MyGdxGame extends Game{
 	private String absoluteFilePath = workingDirectory + File.separator + "ai" + File.separator + "defaultAI.txt";
 
 	public Skin skin;
+	public float brightness = 0.5F;
+	public float volume = 0.5F;
 
 	Car player1;
 	//Car player2 = new Car(2);
