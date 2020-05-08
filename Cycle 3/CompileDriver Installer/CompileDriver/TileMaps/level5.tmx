@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-up" compressionlevel="0" width="24" height="24" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
+ <tileset firstgid="1" source="../../../Program Files/CompileDriver/TileSets/PathAndObjects.tsx"/>
+ <layer id="3" name="Tile Layer 3" width="24" height="24">
+  <data encoding="base64" compression="zlib">
+   eAHbxMDAsGkYYC6gH7iphGOwhIcUUEyaSlhmBJhvBfRjNZHYGi1ciQkfbGpwpWP0uMOmlxg1o+Yj8gC2MBwNn9HwAZWR2NIGev7yAqojtrz2JqN8oKSsJsb9Q818LWAYalMJ6wDNwZXXh5o4ACod45s=
+  </data>
+ </layer>
+ <layer id="1" name="Tile Layer 1" width="24" height="24">
+  <data encoding="base64" compression="zlib">
+   eAFjYBgFoyEwGgKjITDyQmAF0MsrB8jbXUB7u2lo9yyg2bNpaP6o0aMhgCsEcKXtvVg01ALF6oC4HogbgJgYgCttn8WiuRco1gfE/UA8AYs8AMBhC6Q=
+  </data>
+ </layer>
+ <layer id="2" name="Tile Layer 2" width="24" height="24">
+  <data encoding="base64" compression="zlib">
+   eAFjYBgFoyEwGgKjITAaAqMhMBoCoyEwskIAAAkAAAE=
+  </data>
+ </layer>
+</map>

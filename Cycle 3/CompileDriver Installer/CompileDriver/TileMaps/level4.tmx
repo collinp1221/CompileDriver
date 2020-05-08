@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-up" compressionlevel="0" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
+ <tileset firstgid="1" source="../TileSets/wood_tileset.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eAHFVDkOwzAMc9BzT6+9R/rrfrXUQIAIXNFOUXQgpOigacnIUEoZBFv4uwbspUf75/4JdecGXBr5HqibGvBM+FbIrb/ERvhH+AeDF/KKqI9v9h3hc3bKd0O8BxmfnsGznKUW7a3FHA/ztd5ajPXORm/M8V/63Fvq2Udwsd5Zd985l3tDd5zNWdf2wVjo0lr2ZJa9TnPGoblf8cXd+F/g/FWzash86iOH2iV8V+j6tL/eXWS6l+TeR0gT+w==
+  </data>
+ </layer>
+ <layer id="2" name="Tile Layer 2" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eAHt0MkNACAIRFH6b02bcV8O6u8CYiB55xlGxM8XsL3Aod61XdHbKS0QyI1K2T/HJp7LKKho6BiYWNh4YQYNLA==
+  </data>
+ </layer>
+ <layer id="3" name="Tile Layer 3" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eAHt0ElOQlEQBVD2vwtBEJhhB9JII9gloAIKmICigGACsgTPAhz85MPE/JucyUvVTV7FYlH2eYGK8kuq1AibtoIODzyGLbM/ZsIb74TNWsGGH7Zhy6L9f3eBkh+V//jVgbc4CQ5JkuKINBmyBE3O4DEnnHLGOXkKXFAkaOoGG1zRpMU1N9xyxz1B82SwS48+z7wwYMiIV4JmavCDT2bMWfDFkhXf7Dq/jj41cw==
+  </data>
+ </layer>
+</map>
