@@ -65,7 +65,7 @@ public class MyGdxGame extends Game{
 
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-		Gdx.graphics.setTitle("Compile Driver | Cycle 3");
+		Gdx.graphics.setTitle("Compile Driver | Cycle 4");
 		Gdx.graphics.setResizable(false); //Prevent external resizing of window (by user)
 
 		this.setScreen(new TitleScreen(this));

@@ -63,7 +63,7 @@ public class LevelSelect implements Screen {
         shapeRenderer = new ShapeRenderer();
 
         //Set viewport to be 550x550
-        viewport = new FitViewport(550,550);
+        viewport = new FitViewport(700,800);
         game = agame;
         stage = new Stage(new ScreenViewport());
 
@@ -79,37 +79,37 @@ public class LevelSelect implements Screen {
         background = new Sprite(backgroundTexture);
 
         //Track 1 Logo Sprite Initialization
-        track1Texture = new Texture("track1logo.png");
+        track1Texture = new Texture("logos/track1logo.png");
         track1Logo = new Sprite(track1Texture);
         track1Logo.setX(36);
         track1Logo.setY(350);
 
         //Track 2 Logo Sprite Initialization
-        track2Texture = new Texture("track2logo.png");
+        track2Texture = new Texture("logos/track2logo.png");
         track2Logo = new Sprite(track2Texture);
         track2Logo.setX(211);
         track2Logo.setY(350);
 
         //Track 3 Logo Sprite Initialization
-        track3Texture = new Texture("track3logo.png");
+        track3Texture = new Texture("logos/track3logo.png");
         track3Logo = new Sprite(track3Texture);
         track3Logo.setX(386);
         track3Logo.setY(350);
 
         //Track 4 Logo Sprite Initialization
-        track4Texture = new Texture("track4logo.png");
+        track4Texture = new Texture("logos/track4logo.png");
         track4Logo = new Sprite(track4Texture);
         track4Logo.setX(36);
         track4Logo.setY(150);
 
         //Track 5 Logo Sprite Initialization
-        track5Texture = new Texture("track5logo.png");
+        track5Texture = new Texture("logos/track5logo.png");
         track5Logo = new Sprite(track5Texture);
         track5Logo.setX(211);
         track5Logo.setY(150);
 
         //Custom Track Sprite Initialization
-        customTrackTexture = new Texture("customTrackLogo.png");
+        customTrackTexture = new Texture("logos/customTrackLogo.png");
         customTrackSprite = new Sprite(customTrackTexture);
         customTrackSprite.setX(386);
         customTrackSprite.setY(150);

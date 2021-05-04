@@ -47,13 +47,12 @@ public class Car extends BodyHolder {
     private int mTurnDirection = TURN_DIRECTION_NONE;
 
     private float mCurrentWheelAngle = 0;
-    private final Array<Wheel> mAllWheels = new Array<Wheel>();
+    public final Array<Wheel> mAllWheels = new Array<Wheel>();
     private final Array<Wheel> mRevolvingWheels = new Array<Wheel>();
     private float mDrift;
     private float mCurrentMaxSpeed;
     private final float mRegularMaxSpeed;
     private float mAcceleration;
-    private Sprite sprite;
     /*
      * Base constructor for Car object
      * @param maxSpeed Maximum car speed
@@ -65,7 +64,6 @@ public class Car extends BodyHolder {
      */
     public Car(final float maxSpeed, final float drift, final float acceleration, final MapLoader mapLoader, final int wheelDrive, final World world, String absoluteFilePath, TiledMap Map) throws FileNotFoundException {
         super(mapLoader.getPlayer());
-        System.out.println("Constructor");
         this.mRegularMaxSpeed = maxSpeed;
         this.mDrift = drift;
         this.mAcceleration = acceleration;
@@ -74,19 +72,9 @@ public class Car extends BodyHolder {
         getBody().getFixtureList().get(0).setRestitution(RESTITUTION);
         createWheels(world, wheelDrive);
     }
-    public void setSprite(Texture inputTexture){
-        sprite = new Sprite(inputTexture);
-    }
 
-    public Sprite getSprite(){
-        return sprite;
-    }
-    /*
-     * Method used to create wheel
-     * @param world {@link com.topdowncar.game.screens.PlayScreen#mWorld} used to control and add physics objects
-     * @param wheelDrive does this car have 4 wheel drive or 2 wheel drive
-     */
-    private void createWheels(final World world, final int wheelDrive) {
+    private void createWheels(final World world, final int wheelDrive)
+    {
         for (int i = 0; i < 4; i++) {
             float xOffset;
             float yOffset;
@@ -146,34 +134,51 @@ public class Car extends BodyHolder {
     /*
      * Used to process input received from GDX handled in {@link MainScreen#handleInput()}
      */
-    private void processInput() {
+    private void processInput()
+    {
         final Vector2 baseVector = new Vector2(0, 0);
-        if (mTurnDirection == TURN_DIRECTION_LEFT) {
-            if (mCurrentWheelAngle < 0) {
+        if (mTurnDirection == TURN_DIRECTION_LEFT)
+        {
+            if (mCurrentWheelAngle < 0)
+            {
                 mCurrentWheelAngle = 0;
             }
             mCurrentWheelAngle = Math.min(mCurrentWheelAngle += WHEEL_TURN_INCREMENT, MAX_WHEEL_ANGLE);
-        } else if (mTurnDirection == TURN_DIRECTION_RIGHT) {
-            if (mCurrentWheelAngle > 0) {
+        }
+        else if (mTurnDirection == TURN_DIRECTION_RIGHT)
+        {
+            if (mCurrentWheelAngle > 0)
+            {
                 mCurrentWheelAngle = 0;
             }
             mCurrentWheelAngle = Math.max(mCurrentWheelAngle -= WHEEL_TURN_INCREMENT, -MAX_WHEEL_ANGLE);
-        } else {
+        }
+        else
+        {
             mCurrentWheelAngle = 0;
         }
 
-        for (final Wheel wheel : new Array.ArrayIterator<Wheel>(mRevolvingWheels)) {
+        for (final Wheel wheel : new Array.ArrayIterator<Wheel>(mRevolvingWheels))
+        {
             wheel.setAngle(mCurrentWheelAngle);
         }
 
-        if (mDriveDirection == DRIVE_DIRECTION_FORWARD) {
+        if (mDriveDirection == DRIVE_DIRECTION_FORWARD)
+        {
             baseVector.set(0, mAcceleration);
-        } else if (mDriveDirection == DRIVE_DIRECTION_BACKWARD) {
-            if (direction() == DIRECTION_BACKWARD) {
+        }
+        else if (mDriveDirection == DRIVE_DIRECTION_BACKWARD)
+        {
+            if (direction() == DIRECTION_BACKWARD)
+            {
                 baseVector.set(0, -mAcceleration * REVERSE_POWER);
-            } else if (direction() == DIRECTION_FORWARD) {
+            }
+            else if (direction() == DIRECTION_FORWARD)
+            {
                 baseVector.set(0, -mAcceleration * BREAK_POWER);
-            } else {
+            }
+            else
+            {
                 baseVector.set(0, -mAcceleration);
             }
         }
@@ -210,10 +215,10 @@ public class Car extends BodyHolder {
     }
 
     @Override
-    public void update (float delta) {
+    public void update (float delta)
+    {
         super.update(delta);
         processInput();
-        sprite.setPosition(this.getBody().getPosition().x, this.getBody().getPosition().y);
         for (final Wheel wheel : new Array.ArrayIterator<Wheel>(mAllWheels)) {
             wheel.update(delta);
         }

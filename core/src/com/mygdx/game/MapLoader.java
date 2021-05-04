@@ -51,7 +51,7 @@ public class MapLoader implements Disposable {
     public Body getPlayer() { // MAP_PLAYER use to replace foreground
         final Rectangle rectangle = new Rectangle();
         rectangle.set(5000.0f,5000.0f, 1000.0f, 3000.0f);
-        System.out.println("getPlayer method, from Car");
+        //System.out.println("getPlayer method, from Car");
         //final Rectangle rectangle = mMap.getLayers().get(MAP_PLAYER).getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
         return ShapeFactory.createRectangle(
                 new Vector2(rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2), // position

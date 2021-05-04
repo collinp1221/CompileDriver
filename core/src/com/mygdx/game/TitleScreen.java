@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -19,16 +20,19 @@ public class TitleScreen implements Screen {
     private Stage stage;
     SpriteBatch batchpic;
     private Texture img;
+    private Texture titleScreen;
+    private Sprite titleScreenSprite;
 
     public TitleScreen(MyGdxGame agame)
     {
         game = agame;
         stage = new Stage(new ScreenViewport());
+        batchpic = new SpriteBatch();
 
         final TextButton begin = new TextButton("Begin",game.skin,"default");
         begin.setWidth(100);
         begin.setHeight(50);
-        begin.setPosition(225,70);
+        begin.setPosition(200,40);
         begin.addListener(new ClickListener()
         {
 
@@ -47,7 +51,7 @@ public class TitleScreen implements Screen {
         final TextButton settings = new TextButton("Settings",game.skin,"default");
         settings.setWidth(100);
         settings.setHeight(50);
-        settings.setPosition(225,10);
+        settings.setPosition(400,40);
         settings.addListener(new ClickListener()
         {
 
@@ -63,6 +67,9 @@ public class TitleScreen implements Screen {
             }
         });
 
+        titleScreen = new Texture("TitleScreen.png");
+        titleScreenSprite = new Sprite(titleScreen);
+
         stage.addActor(begin);
         stage.addActor(settings);
     }
@@ -76,9 +83,11 @@ public class TitleScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batchpic.begin();
+        titleScreenSprite.draw(batchpic);
+        batchpic.end();
         stage.act();
         stage.draw();
-
     }
 
     @Override
