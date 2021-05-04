@@ -11,8 +11,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new MyGdxGame(), config);
 
-		config.width=550;
-		config.height=550;
+		config.width=700;
+		config.height=800;
 
 		config.foregroundFPS = 60; //Set max FPS to 60
 	}
